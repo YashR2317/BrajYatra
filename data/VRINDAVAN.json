@@ -1,0 +1,499 @@
+    {
+    "vrindavan_places": [
+        {
+        "id": "vrindavan_001",
+        "name": "Banke Bihari Temple",
+        "category": "temple",
+        "address": "Banke Bihari Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5744,
+            "lng": 77.6997
+        },
+        "description": "Banke Bihari Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 1,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "vrindavan_002",
+        "name": "Prem Mandir",
+        "category": "temple",
+        "address": "Prem Mandir, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5576,
+            "lng": 77.7013
+        },
+        "description": "Prem Mandir is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 2,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "vrindavan_003",
+        "name": "ISKCON Krishna Balaram Temple",
+        "category": "temple",
+        "address": "ISKCON Krishna Balaram Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5763,
+            "lng": 77.7005
+        },
+        "description": "ISKCON Krishna Balaram Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 3,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "vrindavan_004",
+        "name": "Radha Vallabh Temple",
+        "category": "temple",
+        "address": "Radha Vallabh Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.574,
+            "lng": 77.699
+        },
+        "description": "Radha Vallabh Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 4,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "vrindavan_005",
+        "name": "Radha Raman Temple",
+        "category": "temple",
+        "address": "Radha Raman Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5738,
+            "lng": 77.698
+        },
+        "description": "Radha Raman Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 5,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "vrindavan_006",
+        "name": "Madan Mohan Temple",
+        "category": "temple",
+        "address": "Madan Mohan Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.577,
+            "lng": 77.6985
+        },
+        "description": "Madan Mohan Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 6,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_007",
+        "name": "Shahji Temple",
+        "category": "temple",
+        "address": "Shahji Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5745,
+            "lng": 77.7
+        },
+        "description": "Shahji Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 7,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_008",
+        "name": "Rangji Temple",
+        "category": "temple",
+        "address": "Rangji Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5695,
+            "lng": 77.69
+        },
+        "description": "Rangji Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 8,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_009",
+        "name": "Nidhivan",
+        "category": "nature",
+        "address": "Nidhivan, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.573,
+            "lng": 77.6975
+        },
+        "description": "Nidhivan is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 9,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_010",
+        "name": "Seva Kunj",
+        "category": "nature",
+        "address": "Seva Kunj, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5725,
+            "lng": 77.6985
+        },
+        "description": "Seva Kunj is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 10,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_011",
+        "name": "Keshi Ghat",
+        "category": "ghat",
+        "address": "Keshi Ghat, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5775,
+            "lng": 77.697
+        },
+        "description": "Keshi Ghat is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 11,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_012",
+        "name": "Imli Tala",
+        "category": "heritage",
+        "address": "Imli Tala, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.575,
+            "lng": 77.696
+        },
+        "description": "Imli Tala is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 12,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_013",
+        "name": "Pagal Baba Temple",
+        "category": "temple",
+        "address": "Pagal Baba Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.56,
+            "lng": 77.702
+        },
+        "description": "Pagal Baba Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 13,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_014",
+        "name": "Jaipur Temple",
+        "category": "temple",
+        "address": "Jaipur Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5755,
+            "lng": 77.6995
+        },
+        "description": "Jaipur Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 14,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_015",
+        "name": "Govind Dev Temple Ruins",
+        "category": "monument",
+        "address": "Govind Dev Temple Ruins, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5748,
+            "lng": 77.6988
+        },
+        "description": "Govind Dev Temple Ruins is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 15,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_016",
+        "name": "Vrindavan Parikrama Marg",
+        "category": "parikrama_route",
+        "address": "Vrindavan Parikrama Marg, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5744,
+            "lng": 77.6997
+        },
+        "description": "Vrindavan Parikrama Marg is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 16,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_017",
+        "name": "Loi Bazaar",
+        "category": "market",
+        "address": "Loi Bazaar, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5742,
+            "lng": 77.699
+        },
+        "description": "Loi Bazaar is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 17,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_018",
+        "name": "Govinda\u2019s Restaurant",
+        "category": "restaurant",
+        "address": "Govinda\u2019s Restaurant, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.576,
+            "lng": 77.7008
+        },
+        "description": "Govinda\u2019s Restaurant is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 18,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_019",
+        "name": "MVT Restaurant",
+        "category": "restaurant",
+        "address": "MVT Restaurant, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5765,
+            "lng": 77.701
+        },
+        "description": "MVT Restaurant is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 19,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_020",
+        "name": "Vrindavan Chandrodaya Temple",
+        "category": "temple",
+        "address": "Vrindavan Chandrodaya Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.564,
+            "lng": 77.71
+        },
+        "description": "Vrindavan Chandrodaya Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 20,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_021",
+        "name": "Katyayani Peeth",
+        "category": "temple",
+        "address": "Katyayani Peeth, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.575,
+            "lng": 77.702
+        },
+        "description": "Katyayani Peeth is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 21,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "vrindavan_022",
+        "name": "Radha Damodar Temple",
+        "category": "temple",
+        "address": "Radha Damodar Temple, Vrindavan, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5735,
+            "lng": 77.6992
+        },
+        "description": "Radha Damodar Temple is a notable place in Vrindavan.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 22,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        }
+    ],
+    "vrindavan_parikrama_route": {
+        "distance_km": 10,
+        "polyline_coordinates": [
+        [
+            27.5744,
+            77.6997
+        ],
+        [
+            27.5775,
+            77.697
+        ],
+        [
+            27.5763,
+            77.7005
+        ],
+        [
+            27.573,
+            77.6975
+        ],
+        [
+            27.57,
+            77.704
+        ],
+        [
+            27.565,
+            77.706
+        ],
+        [
+            27.5744,
+            77.6997
+        ]
+        ]
+    }
+    }

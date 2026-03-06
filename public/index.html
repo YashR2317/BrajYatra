@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fef9ef">
+    <title>BrajYatra — Sacred Braj Tirth Yatra Planner</title>
+    <meta name="description"
+        content="Plan your sacred pilgrimage through Mathura, Vrindavan, Agra, Govardhan, Barsana, and Gokul — the divine land of Shri Krishna.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Saffron Bands -->
+    <div class="saffron-band top-band"></div>
+    <div class="saffron-band bottom-band"></div>
+
+    <!-- ═══════════════ LANDING PAGE ═══════════════ -->
+    <div class="landing" id="landing">
+        <canvas id="particleCanvas"></canvas>
+
+        <!-- Rangoli Corner Decorations -->
+        <div class="corner-deco top-left"></div>
+        <div class="corner-deco top-right"></div>
+        <div class="corner-deco bottom-left"></div>
+        <div class="corner-deco bottom-right"></div>
+
+        <!-- Floating Spiritual Elements -->
+        <div class="floating-element lotus-1">🪷</div>
+        <div class="floating-element lotus-2">🪷</div>
+        <div class="floating-element lotus-3">🪷</div>
+        <div class="floating-element diya-1">🪔</div>
+        <div class="floating-element diya-2">🪔</div>
+        <div class="floating-element om-1">ॐ</div>
+
+        <div class="landing-content">
+            <p class="sanskrit-mantra">॥ श्री कृष्णाय नमः ॥</p>
+
+            <div class="flute-deco">
+                <span class="flute-icon">🪈</span>
+            </div>
+
+            <h1 class="landing-title">
+                <span class="title-devanagari">ब्रज</span>
+                <span class="title-main">Braj</span><span class="title-accent">Yatra</span>
+            </h1>
+
+            <p class="title-tagline">Sacred Braj Region Travel Planner</p>
+
+            <p class="landing-subtitle">
+                Embark on a divine journey through Lord Krishna's sacred land.<br>
+                Every temple, every ghat, every moment — planned with devotion.
+            </p>
+
+            <div class="city-list">
+                <span class="city-dot"></span><span>Mathura</span>
+                <span class="city-dot"></span><span>Vrindavan</span>
+                <span class="city-dot"></span><span>Agra</span>
+                <span class="city-dot"></span><span>Govardhan</span>
+                <span class="city-dot"></span><span>Barsana</span>
+                <span class="city-dot"></span><span>Gokul</span>
+            </div>
+
+            <button class="start-btn" id="start-btn" onclick="enterChat()">
+                <span class="btn-om">ॐ</span>
+                Begin Sacred Journey
+                <span class="btn-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </span>
+            </button>
+
+            <div class="landing-features">
+                <span class="feature-pill"><span class="fp-icon">🛕</span> Temple Planning</span>
+                <span class="feature-pill"><span class="fp-icon">🤖</span> AI-Powered</span>
+                <span class="feature-pill"><span class="fp-icon">🌤️</span> Live Weather</span>
+                <span class="feature-pill"><span class="fp-icon">🗺️</span> Maps Routes</span>
+                <span class="feature-pill"><span class="fp-icon">🌐</span> Hindi & English</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════ CHAT APPLICATION ═══════════════ -->
+    <div class="app chat-app hidden" id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" title="Collapse sidebar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="11 17 6 12 11 7"></polyline>
+                    <polyline points="18 17 13 12 18 7"></polyline>
+                </svg>
+            </button>
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">ॐ</span>
+                    <div>
+                        <h1>BrajYatra</h1>
+                        <p class="logo-sub" data-i18n="logo_sub">Hare Krishna · AI Tirth Companion</p>
+                    </div>
+                </div>
+                <!-- Language Toggle -->
+                <div class="lang-toggle" id="lang-toggle">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="hi">हिंदी</button>
+                </div>
+                <!-- Theme Toggle -->
+                <div class="theme-toggle">
+                    <button class="theme-toggle-btn" id="theme-toggle-btn">
+                        <span class="theme-icon">🌙</span>
+                        <span class="theme-label">Dark Mode</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="btn-new-chat" id="btn-new-chat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span data-i18n="new_chat">New Chat</span>
+            </button>
+
+            <div class="quick-actions">
+                <p class="section-label" data-i18n="quick_actions">🪷 Quick Actions</p>
+                <button class="quick-btn" data-action="questionnaire">
+                    <span>🗺️</span> <span data-i18n="plan_yatra">Plan Yatra (Questionnaire)</span>
+                </button>
+                <button class="quick-btn" data-query-key="query_darshan">
+                    <span>🛕</span> <span data-i18n="darshan_guide">Temple Darshan Guide</span>
+                </button>
+                <button class="quick-btn" data-query-key="query_weather">
+                    <span>🌤️</span> <span data-i18n="weather">Weather</span>
+                </button>
+                <button class="quick-btn" data-query-key="query_krishna">
+                    <span>📖</span> <span data-i18n="krishna_leela">Krishna Leela & History</span>
+                </button>
+                <button class="quick-btn" data-query-key="query_prasadam">
+                    <span>🍛</span> <span data-i18n="prasadam">Prasadam & Food</span>
+                </button>
+                <button class="quick-btn" data-query-key="query_parikrama">
+                    <span>🙏</span> <span data-i18n="parikrama">Braj Parikrama</span>
+                </button>
+            </div>
+
+
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-main">
+            <header class="mobile-header">
+                <button class="btn-menu" id="btn-menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+                <h2>ॐ BrajYatra</h2>
+                <div></div>
+            </header>
+
+            <div class="messages-container" id="messages-container">
+                <!-- Welcome Screen -->
+                <div class="welcome-screen" id="welcome-screen">
+                    <div class="welcome-mandala">
+                        <span class="welcome-om">ॐ</span>
+                    </div>
+                    <h2 class="welcome-title" data-i18n="welcome_title">BRAJYATRA.AI</h2>
+                    <p class="welcome-tagline" data-i18n="welcome_tagline">Where Travel meets Tradition</p>
+                    <p class="welcome-desc" data-i18n="welcome_desc">Your AI-powered <em>Tirth Companion</em> for the
+                        sacred <strong>Braj Dham</strong> — walk the
+                        land where <strong>Shri Krishna</strong> performed His divine leelas.</p>
+
+                    <div class="welcome-cards">
+                        <div class="welcome-card" data-action="questionnaire">
+                            <span class="card-icon">🗓️</span>
+                            <h3 data-i18n="card_plan">Plan Your Yatra</h3>
+                            <p data-i18n="card_plan_desc">Custom itinerary with preferences</p>
+                        </div>
+                        <div class="welcome-card" data-query-key="query_darshan">
+                            <span class="card-icon">🛕</span>
+                            <h3 data-i18n="card_darshan">Temple Darshan</h3>
+                            <p data-i18n="card_darshan_desc">Sacred temples &amp; divine darshan</p>
+                        </div>
+                        <div class="welcome-card" data-query-key="query_festivals">
+                            <span class="card-icon">🎉</span>
+                            <h3 data-i18n="card_festivals">Festivals &amp; Events</h3>
+                            <p data-i18n="card_festivals_desc">Sacred festivals &amp; celebrations</p>
+                        </div>
+                        <div class="welcome-card" data-query-key="query_parikrama">
+                            <span class="card-icon">🙏</span>
+                            <h3 data-i18n="card_parikrama">Parikrama Guide</h3>
+                            <p data-i18n="card_parikrama_desc">Sacred circumambulation routes</p>
+                        </div>
+                    </div>
+
+                    <div class="welcome-cities" id="welcome-cities">
+                        <!-- Cities loaded dynamically with images -->
+                    </div>
+
+                    <div class="welcome-shloka">
+                        <p>सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज</p>
+                        <span>— Bhagavad Gita 18.66</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea id="message-input" data-i18n-placeholder="input_placeholder"
+                        placeholder="Ask about Braj Dham, plan a Yatra..." rows="1" maxlength="2000"></textarea>
+                    <button class="btn-send" id="btn-send" disabled>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="input-hint" data-i18n="input_hint">BrajYatra · Plan Yatra · Darshan Guide · Weather · Krishna
+                    Leelas</p>
+            </div>
+        </main>
+
+        <!-- Questionnaire Modal -->
+        <div class="modal-overlay" id="questionnaire-modal">
+            <div class="modal-content">
+                <button class="modal-close" id="modal-close">✕</button>
+                <div class="modal-header">
+                    <span class="modal-icon">🪷</span>
+                    <h2 data-i18n="modal_title">Plan Your Sacred Yatra</h2>
+                    <p data-i18n="modal_desc">Tell us your preferences for a personalized itinerary</p>
+                </div>
+
+                <div class="stepper">
+                    <div class="step-indicators">
+                        <span class="step-dot active" data-step="1">1</span>
+                        <span class="step-line"></span>
+                        <span class="step-dot" data-step="2">2</span>
+                        <span class="step-line"></span>
+                        <span class="step-dot" data-step="3">3</span>
+                        <span class="step-line"></span>
+                        <span class="step-dot" data-step="4">4</span>
+                        <span class="step-line"></span>
+                        <span class="step-dot" data-step="5">5</span>
+                        <span class="step-line"></span>
+                        <span class="step-dot" data-step="6">6</span>
+                    </div>
+                </div>
+
+                <!-- Step 1: Yatra Type -->
+                <div class="q-step" id="q-step-1">
+                    <h3 data-i18n="q1_title">🙏 Yatra Type</h3>
+                    <p data-i18n="q1_desc">What kind of journey calls to your soul?</p>
+                    <div class="q-options" data-field="yatraType">
+                        <button class="q-option" data-value="pilgrimage">
+                            <span>🛕</span>
+                            <strong data-i18n="q1_opt1">Pilgrimage Tour</strong>
+                            <small data-i18n="q1_opt1_desc">Sacred pilgrimage & temple darshan</small>
+                        </button>
+                        <button class="q-option" data-value="cultural">
+                            <span>🏛️</span>
+                            <strong data-i18n="q1_opt2">Cultural Tour</strong>
+                            <small data-i18n="q1_opt2_desc">Culture, heritage & monuments</small>
+                        </button>
+                        <button class="q-option" data-value="complete">
+                            <span>🌸</span>
+                            <strong data-i18n="q1_opt3">Complete Braj Yatra</strong>
+                            <small data-i18n="q1_opt3_desc">Complete tour — temples, heritage & nature</small>
+                        </button>
+                        <button class="q-option" data-value="mixed">
+                            <span>✨</span>
+                            <strong data-i18n="q1_opt4">Custom Mix</strong>
+                            <small data-i18n="q1_opt4_desc">I'll pick my own interests</small>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Duration -->
+                <div class="q-step hidden" id="q-step-2">
+                    <h3 data-i18n="q2_title">📅 Yatra Duration</h3>
+                    <p data-i18n="q2_desc">How many days for your sacred journey?</p>
+                    <div class="q-days" data-field="days">
+                        <button class="q-day-btn" data-value="1">1 Day</button>
+                        <button class="q-day-btn" data-value="2">2 Days</button>
+                        <button class="q-day-btn active" data-value="3">3 Days</button>
+                        <button class="q-day-btn" data-value="5">5 Days</button>
+                        <button class="q-day-btn" data-value="7">7 Days</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Cities -->
+                <div class="q-step hidden" id="q-step-3">
+                    <h3 data-i18n="q3_title">📍 Sacred Destinations</h3>
+                    <p data-i18n="q3_desc">Select the holy cities you wish to visit</p>
+                    <div class="q-cities" id="q-cities" data-field="cities">
+                        <!-- Loaded dynamically with images -->
+                    </div>
+                </div>
+
+                <!-- Step 4: Interests -->
+                <div class="q-step hidden" id="q-step-4">
+                    <h3 data-i18n="q4_title">🪷 Your Interests</h3>
+                    <p data-i18n="q4_desc">What experiences are you seeking? (Select multiple)</p>
+                    <div class="q-chips" data-field="interests">
+                        <button class="q-chip" data-value="pilgrimage" data-i18n="int_temple">🛕 Temple Darshan</button>
+                        <button class="q-chip" data-value="ghat" data-i18n="int_ghat">🌊 Ghat & Holy Bath</button>
+                        <button class="q-chip" data-value="food" data-i18n="int_food">🍛 Prasadam & Food</button>
+                        <button class="q-chip" data-value="heritage" data-i18n="int_heritage">🏛️ Heritage &
+                            Monuments</button>
+                        <button class="q-chip" data-value="market" data-i18n="int_market">🛍️ Bazaar & Shopping</button>
+                        <button class="q-chip" data-value="nature" data-i18n="int_nature">🌿 Nature & Parikrama</button>
+                        <button class="q-chip" data-value="aarti" data-i18n="int_aarti">🪔 Aarti & Kirtan</button>
+                        <button class="q-chip" data-value="festival" data-i18n="int_festival">🎉 Festivals &
+                            Events</button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Pace & Group -->
+                <div class="q-step hidden" id="q-step-5">
+                    <h3 data-i18n="q5_title">🚶 Pace & Group</h3>
+
+                    <p data-i18n="q5_pace">Your preferred pace:</p>
+                    <div class="q-pace" data-field="pace">
+                        <button class="q-option-sm" data-value="relaxed">
+                            <strong data-i18n="pace_relaxed">🧘 Relaxed</strong>
+                            <small data-i18n="pace_relaxed_desc">Fewer places, more time at each</small>
+                        </button>
+                        <button class="q-option-sm active" data-value="moderate">
+                            <strong data-i18n="pace_moderate">⚖️ Moderate</strong>
+                            <small data-i18n="pace_moderate_desc">Balanced pace</small>
+                        </button>
+                        <button class="q-option-sm" data-value="intensive">
+                            <strong data-i18n="pace_intensive">🏃 Intensive</strong>
+                            <small data-i18n="pace_intensive_desc">Cover maximum places</small>
+                        </button>
+                    </div>
+
+                    <p style="margin-top:16px" data-i18n="q5_group">Travelling as:</p>
+                    <div class="q-group" data-field="group">
+                        <button class="q-chip-sm" data-value="solo" data-i18n="grp_solo">🧑 Solo</button>
+                        <button class="q-chip-sm" data-value="couple" data-i18n="grp_couple">💑 Couple</button>
+                        <button class="q-chip-sm" data-value="family" data-i18n="grp_family">👨‍👩‍👧 Family</button>
+                        <button class="q-chip-sm" data-value="group" data-i18n="grp_group">👥 Group</button>
+                    </div>
+                </div>
+
+                <!-- Step 6: Starting Location & Time -->
+                <div class="q-step hidden" id="q-step-6">
+                    <h3 data-i18n="q6_title">📍 Starting Point & Time</h3>
+                    <p data-i18n="q6_desc">Where are you starting from and when do you arrive?</p>
+
+                    <div class="q-field-group">
+                        <label data-i18n="q6_from_label">Starting from (city, station, or airport):</label>
+                        <input type="text" id="q-start-location" class="q-text-input"
+                            placeholder="e.g. Delhi, Agra Cantt Station, Mathura Junction"
+                            data-i18n-placeholder="q6_from_placeholder">
+                    </div>
+
+                    <div class="q-field-group">
+                        <label data-i18n="q6_first_city">Which city do you want to visit first?</label>
+                        <div class="q-first-city" id="q-first-city">
+                            <!-- Populated dynamically based on selected cities -->
+                        </div>
+                    </div>
+
+                    <div class="q-field-group">
+                        <label data-i18n="q6_time_label">Arrival / Start time:</label>
+                        <div class="q-time-options" data-field="startTime">
+                            <button class="q-chip-sm" data-value="morning" data-i18n="time_morning">🌅 Early Morning
+                                (5-7 AM)</button>
+                            <button class="q-chip-sm active" data-value="forenoon" data-i18n="time_forenoon">☀️ Forenoon
+                                (8-10 AM)</button>
+                            <button class="q-chip-sm" data-value="afternoon" data-i18n="time_afternoon">🌤️ Afternoon
+                                (12-2 PM)</button>
+                            <button class="q-chip-sm" data-value="evening" data-i18n="time_evening">🌇 Evening (4-6
+                                PM)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-back hidden" id="q-back" data-i18n="btn_back">← Back</button>
+                    <button class="btn-next" id="q-next" data-i18n="btn_next">Next →</button>
+                    <button class="btn-submit hidden" id="q-submit" data-i18n="btn_submit">🙏 Plan My Yatra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/landing.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

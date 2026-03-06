@@ -1,0 +1,456 @@
+    {
+    "mathura_places": [
+        {
+        "id": "mathura_001",
+        "name": "Shri Krishna Janmabhoomi Temple",
+        "category": "temple",
+        "address": "Shri Krishna Janmabhoomi Temple, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5035,
+            "lng": 77.6721
+        },
+        "description": "Shri Krishna Janmabhoomi Temple is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 1,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "mathura_002",
+        "name": "Dwarkadhish Temple",
+        "category": "temple",
+        "address": "Dwarkadhish Temple, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5046,
+            "lng": 77.6725
+        },
+        "description": "Dwarkadhish Temple is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 2,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "mathura_003",
+        "name": "Vishram Ghat",
+        "category": "ghat",
+        "address": "Vishram Ghat, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5052,
+            "lng": 77.6712
+        },
+        "description": "Vishram Ghat is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 3,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "mathura_004",
+        "name": "Government Museum Mathura",
+        "category": "museum",
+        "address": "Government Museum Mathura, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.4924,
+            "lng": 77.6737
+        },
+        "description": "Government Museum Mathura is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 4,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "mathura_005",
+        "name": "Kans Qila",
+        "category": "monument",
+        "address": "Kans Qila, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5085,
+            "lng": 77.676
+        },
+        "description": "Kans Qila is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": true,
+        "popularity_rank": 5,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "high"
+        },
+        {
+        "id": "mathura_006",
+        "name": "Gita Mandir",
+        "category": "temple",
+        "address": "Gita Mandir, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.51,
+            "lng": 77.673
+        },
+        "description": "Gita Mandir is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 6,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_007",
+        "name": "Birla Mandir Mathura",
+        "category": "temple",
+        "address": "Birla Mandir Mathura, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.495,
+            "lng": 77.679
+        },
+        "description": "Birla Mandir Mathura is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 7,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_008",
+        "name": "Bhuteshwar Mahadev Temple",
+        "category": "temple",
+        "address": "Bhuteshwar Mahadev Temple, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.498,
+            "lng": 77.672
+        },
+        "description": "Bhuteshwar Mahadev Temple is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 8,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_009",
+        "name": "Potra Kund",
+        "category": "ghat",
+        "address": "Potra Kund, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.503,
+            "lng": 77.6715
+        },
+        "description": "Potra Kund is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 9,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_010",
+        "name": "Chamunda Devi Temple",
+        "category": "temple",
+        "address": "Chamunda Devi Temple, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.506,
+            "lng": 77.67
+        },
+        "description": "Chamunda Devi Temple is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 10,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_011",
+        "name": "Sati Burj",
+        "category": "monument",
+        "address": "Sati Burj, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5065,
+            "lng": 77.675
+        },
+        "description": "Sati Burj is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 11,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_012",
+        "name": "ISKCON Mathura",
+        "category": "temple",
+        "address": "ISKCON Mathura, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.509,
+            "lng": 77.68
+        },
+        "description": "ISKCON Mathura is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 12,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_013",
+        "name": "Tilak Dwar Market",
+        "category": "market",
+        "address": "Tilak Dwar Market, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.504,
+            "lng": 77.673
+        },
+        "description": "Tilak Dwar Market is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 13,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_014",
+        "name": "Chowk Bazaar",
+        "category": "market",
+        "address": "Chowk Bazaar, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5045,
+            "lng": 77.6718
+        },
+        "description": "Chowk Bazaar is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 14,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_015",
+        "name": "Brijwasi Mithai",
+        "category": "restaurant",
+        "address": "Brijwasi Mithai, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5055,
+            "lng": 77.6725
+        },
+        "description": "Brijwasi Mithai is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 15,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_016",
+        "name": "Om Sweets Mathura",
+        "category": "restaurant",
+        "address": "Om Sweets Mathura, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.507,
+            "lng": 77.6735
+        },
+        "description": "Om Sweets Mathura is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 16,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_017",
+        "name": "Yamuna Aarti Point",
+        "category": "ghat",
+        "address": "Yamuna Aarti Point, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.505,
+            "lng": 77.671
+        },
+        "description": "Yamuna Aarti Point is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 17,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_018",
+        "name": "Rangji Temple (Mathura Region)",
+        "category": "temple",
+        "address": "Rangji Temple (Mathura Region), Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5065,
+            "lng": 77.678
+        },
+        "description": "Rangji Temple (Mathura Region) is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 18,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_019",
+        "name": "Dampier Park",
+        "category": "park",
+        "address": "Dampier Park, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.492,
+            "lng": 77.674
+        },
+        "description": "Dampier Park is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 19,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_020",
+        "name": "Sanskriti University Temple",
+        "category": "temple",
+        "address": "Sanskriti University Temple, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.48,
+            "lng": 77.69
+        },
+        "description": "Sanskriti University Temple is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 20,
+        "tags": [
+            "heritage",
+            "pilgrimage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_021",
+        "name": "Jama Masjid Mathura",
+        "category": "mosque",
+        "address": "Jama Masjid Mathura, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.5038,
+            "lng": 77.6705
+        },
+        "description": "Jama Masjid Mathura is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 21,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        },
+        {
+        "id": "mathura_022",
+        "name": "St. Dominic Church",
+        "category": "church",
+        "address": "St. Dominic Church, Mathura, Uttar Pradesh, India",
+        "coordinates": {
+            "lat": 27.4985,
+            "lng": 77.6755
+        },
+        "description": "St. Dominic Church is a notable place in Mathura.",
+        "opening_hours": "Varies",
+        "entry_fee": null,
+        "highlight": false,
+        "popularity_rank": 22,
+        "tags": [
+            "heritage"
+        ],
+        "estimated_visit_duration": 45,
+        "crowd_level": "medium"
+        }
+    ]
+    }

@@ -1,0 +1,10 @@
+Google Maps - AIzaSyBeI4HjFCYGjfMl-Qm7Pa7Ihe7ErHtprgQ
+
+Openweather - 1095caf889f15b69c0b292d011227db1
+
+HF Token - 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
+
+Gemini - AIzaSyCizcadBoKlIcDGzMmCfosqPpY4WxTprd0
+
+LLM Model - gemini-2.5-flash
+Fallback LLM Model - mistralai/Mistral-7B-Instruct-v0.3
