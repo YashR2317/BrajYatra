@@ -1,6 +1,3 @@
-
-
-
 const COST_ESTIMATES = {
     food: {
         low: { perMeal: 80, mealsPerDay: 3 },
@@ -19,7 +16,6 @@ const COST_ESTIMATES = {
     }
 };
 
-
 function estimateBudget({ places = [], days = 1, budgetLevel = 'medium', people = 2 }) {
     const level = budgetLevel.toLowerCase();
     const costs = {
@@ -31,13 +27,11 @@ function estimateBudget({ places = [], days = 1, budgetLevel = 'medium', people 
     const transportCost = COST_ESTIMATES.transport[level] || COST_ESTIMATES.transport.medium;
     const accomCost = COST_ESTIMATES.accommodation[level] || COST_ESTIMATES.accommodation.medium;
 
-    
     const entryFees = places.reduce((sum, p) => {
         const fee = parseFloat(p.entry_fee) || 0;
         return sum + (fee * people);
     }, 0);
 
-    
     const totalFood = foodCost.perMeal * foodCost.mealsPerDay * days * people;
     const totalTransport = transportCost.perDay * days;
     const nights = Math.max(0, days - 1);
@@ -59,7 +53,6 @@ function estimateBudget({ places = [], days = 1, budgetLevel = 'medium', people 
         breakdown_note: getBudgetNote(level)
     };
 }
-
 
 function getBudgetNote(level) {
     switch (level) {

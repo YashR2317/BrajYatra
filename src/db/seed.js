@@ -1,5 +1,3 @@
-
-
 const path = require('path');
 const fs = require('fs');
 const { getDB, getPlacesCount } = require('./database');
@@ -75,7 +73,6 @@ function seed() {
         const raw = fs.readFileSync(filePath, 'utf-8');
         const data = JSON.parse(raw);
 
-        
         const placeKey = Object.keys(data).find(k => k.endsWith('_places'));
         if (!placeKey) {
             console.warn(`[Seed] No places key found in ${filename}`);
@@ -88,13 +85,11 @@ function seed() {
         console.log(`[Seed] ${city}: ${places.length} places inserted`);
     }
 
-    
     db.exec("INSERT INTO places_fts(places_fts) VALUES('rebuild')");
 
     console.log(`[Seed] ✅ Total: ${totalInserted} places seeded`);
     return totalInserted;
 }
-
 
 if (require.main === module) {
     const count = seed();

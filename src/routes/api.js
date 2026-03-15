@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const router = express.Router();
 const orchestrator = require('../agents/orchestrator');
@@ -12,8 +10,6 @@ const llm = require('../llm/connector');
 const { generateId, sanitizeInput } = require('../utils/helpers');
 const { enrichWithImage, getCityImage, CITY_IMAGES } = require('../utils/place-images');
 
-
-
 router.post('/chat', async (req, res) => {
     try {
         const { message, sessionId, language } = req.body;
@@ -23,13 +19,11 @@ router.post('/chat', async (req, res) => {
         const sanitized = sanitizeInput(message);
         let sid = sessionId;
 
-        
         if (!sid) {
             sid = generateId();
-            try { db.createSession(sid); } catch (e) {  }
+            try { db.createSession(sid); } catch (e) { }
         }
 
-        
         const routing = await orchestrator.classify(sanitized);
         let response;
 
@@ -44,7 +38,7 @@ router.post('/chat', async (req, res) => {
                     budget_level: routing.budget_level || 'medium',
                     language: userLang
                 });
-                
+
                 try {
                     db.saveMessage(sid, 'user', sanitized, { intent: 'itinerary' });
                     db.saveMessage(sid, 'assistant', JSON.stringify(response.itinerary), { type: 'itinerary' });
@@ -98,14 +92,15 @@ router.post('/chat', async (req, res) => {
                     source: response.source
                 });
 
-            default: 
+            default:
                 response = await chatAgent.chat(sanitized, sid, userLang);
                 return res.json({
                     sessionId: sid,
                     type: 'chat',
                     intent: routing,
                     text: response.text,
-                    source: response.source
+                    source: response.source,
+                    groundingMetadata: response.groundingMetadata || null
                 });
         }
     } catch (error) {
@@ -113,8 +108,6 @@ router.post('/chat', async (req, res) => {
         res.status(500).json({ error: 'Something went wrong. Please try again.' });
     }
 });
-
-
 
 router.post('/itinerary', async (req, res) => {
     try {
@@ -132,28 +125,22 @@ router.post('/itinerary', async (req, res) => {
     }
 });
 
-
-
 router.get('/places/suggest', (req, res) => {
     try {
         const { city, exclude, category } = req.query;
         if (!city) return res.json({ suggestions: [] });
 
-        
         let places = db.getPlacesByCity(city);
 
-        
         if (exclude) {
             const excludeSet = new Set(exclude.split(',').map(id => id.trim()));
             places = places.filter(p => !excludeSet.has(p.id));
         }
 
-        
         const { rankPlaces } = require('../agents/scoring');
         const interests = category ? [category.toLowerCase()] : [];
         const scored = rankPlaces(places, { interests, cities: [city] });
 
-        
         const suggestions = scored.slice(0, 5).map(p => ({
             id: p.id,
             name: p.name,
@@ -173,8 +160,6 @@ router.get('/places/suggest', (req, res) => {
         res.json({ suggestions: [] });
     }
 });
-
-
 
 router.get('/places', (req, res) => {
     try {
@@ -207,8 +192,6 @@ router.get('/places/:id', (req, res) => {
     }
 });
 
-
-
 router.get('/cities', (req, res) => {
     try {
         const cities = db.getCities().map(city => ({
@@ -222,8 +205,6 @@ router.get('/cities', (req, res) => {
     }
 });
 
-
-
 router.get('/weather/:city', async (req, res) => {
     try {
         const result = await weatherAgent.getWeather(req.params.city);
@@ -232,8 +213,6 @@ router.get('/weather/:city', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch weather' });
     }
 });
-
-
 
 router.post('/session', (req, res) => {
     try {
@@ -253,8 +232,6 @@ router.get('/session/:id/history', (req, res) => {
         res.status(500).json({ error: 'Failed to fetch history' });
     }
 });
-
-
 
 router.get('/health', async (req, res) => {
     const llmHealth = await llm.healthCheck();

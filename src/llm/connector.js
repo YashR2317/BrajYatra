@@ -1,5 +1,3 @@
-
-
 const gemini = require('./gemini');
 const kaggle = require('./kaggle-fallback');
 require('dotenv').config();
@@ -7,7 +5,6 @@ require('dotenv').config();
 function getMode() {
     return (process.env.LLM_MODE || 'gemini').toLowerCase();
 }
-
 
 async function generateResponse(systemPrompt, userMessage, history = []) {
     const mode = getMode();
@@ -17,7 +14,7 @@ async function generateResponse(systemPrompt, userMessage, history = []) {
     }
 
     if (mode === 'hybrid') {
-        
+
         const geminiResult = await gemini.generateResponse(systemPrompt, userMessage, history);
         if (geminiResult.success) return geminiResult;
 
@@ -32,10 +29,9 @@ async function generateResponse(systemPrompt, userMessage, history = []) {
         };
     }
 
-    
-    return await gemini.generateResponse(systemPrompt, userMessage, history);
+    const geminiResult = await gemini.generateResponse(systemPrompt, userMessage, history);
+    return geminiResult;
 }
-
 
 async function generateJSON(systemPrompt, userMessage) {
     const mode = getMode();
@@ -61,7 +57,6 @@ async function generateJSON(systemPrompt, userMessage) {
 
     return await gemini.generateJSON(systemPrompt, userMessage);
 }
-
 
 async function healthCheck() {
     const [geminiOk, kaggleOk] = await Promise.all([

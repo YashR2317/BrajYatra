@@ -1,6 +1,3 @@
-
-
-
 function haversine(lat1, lng1, lat2, lng2) {
     const R = 6371;
     const dLat = toRad(lat2 - lat1);
@@ -13,7 +10,6 @@ function haversine(lat1, lng1, lat2, lng2) {
 
 function toRad(deg) { return deg * Math.PI / 180; }
 
-
 const CITY_CENTROIDS = {
     mathura: { lat: 27.4924, lng: 77.6737 },
     vrindavan: { lat: 27.5744, lng: 77.6997 },
@@ -22,7 +18,6 @@ const CITY_CENTROIDS = {
     barsana: { lat: 27.6495, lng: 77.3763 },
     gokul: { lat: 27.4394, lng: 77.7195 }
 };
-
 
 function optimizeRoute(places, startLat, startLng) {
     if (places.length <= 1) return places;
@@ -52,7 +47,6 @@ function optimizeRoute(places, startLat, startLng) {
 
     return ordered;
 }
-
 
 function estimateTravelTime(lat1, lng1, lat2, lng2) {
     const dist = haversine(lat1, lng1, lat2, lng2);

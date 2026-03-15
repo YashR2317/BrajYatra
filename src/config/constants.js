@@ -1,5 +1,3 @@
-
-
 const CITIES = ['Mathura', 'Vrindavan', 'Agra', 'Govardhan', 'Barsana', 'Gokul'];
 
 const CITY_EMOJI = {

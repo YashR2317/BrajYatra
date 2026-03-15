@@ -59,12 +59,12 @@
             </p>
 
             <div class="city-list">
-                <span class="city-dot"></span><span>Mathura</span>
-                <span class="city-dot"></span><span>Vrindavan</span>
-                <span class="city-dot"></span><span>Agra</span>
-                <span class="city-dot"></span><span>Govardhan</span>
-                <span class="city-dot"></span><span>Barsana</span>
-                <span class="city-dot"></span><span>Gokul</span>
+                <span class="city-dot"></span><span class="city-link" data-city="Mathura">Mathura</span>
+                <span class="city-dot"></span><span class="city-link" data-city="Vrindavan">Vrindavan</span>
+                <span class="city-dot"></span><span class="city-link" data-city="Agra">Agra</span>
+                <span class="city-dot"></span><span class="city-link" data-city="Govardhan">Govardhan</span>
+                <span class="city-dot"></span><span class="city-link" data-city="Barsana">Barsana</span>
+                <span class="city-dot"></span><span class="city-link" data-city="Gokul">Gokul</span>
             </div>
 
             <button class="start-btn" id="start-btn" onclick="enterChat()">
@@ -84,6 +84,17 @@
                 <span class="feature-pill"><span class="fp-icon">🌤️</span> Live Weather</span>
                 <span class="feature-pill"><span class="fp-icon">🗺️</span> Maps Routes</span>
                 <span class="feature-pill"><span class="fp-icon">🌐</span> Hindi & English</span>
+            </div>
+        </div>
+
+        <!-- City Places View (shown on city click) -->
+        <div class="city-places-view hidden" id="city-places-view">
+            <div class="city-places-header">
+                <button class="city-places-back" id="city-places-back">← Back</button>
+                <h2 class="city-places-title" id="city-places-title">Places in <span id="city-places-name"></span></h2>
+            </div>
+            <div class="city-places-grid" id="city-places-grid">
+                <!-- Dynamically populated -->
             </div>
         </div>
     </div>
@@ -119,6 +130,13 @@
                     </button>
                 </div>
             </div>
+
+            <button class="btn-back-landing" id="btn-back-landing" title="Back to Home">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                <span data-i18n="back_home">Back to Home</span>
+            </button>
 
             <button class="btn-new-chat" id="btn-new-chat">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -224,6 +242,11 @@
                             <polygon points="22 2 15 22 11 13 2 9 22 2" />
                         </svg>
                     </button>
+                    <button class="btn-stop hidden" id="btn-stop" title="Stop generating">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="6" y="6" width="12" height="12" rx="2" />
+                        </svg>
+                    </button>
                 </div>
                 <p class="input-hint" data-i18n="input_hint">BrajYatra · Plan Yatra · Darshan Guide · Weather · Krishna
                     Leelas</p>
@@ -303,6 +326,15 @@
                     <p data-i18n="q3_desc">Select the holy cities you wish to visit</p>
                     <div class="q-cities" id="q-cities" data-field="cities">
                         <!-- Loaded dynamically with images -->
+                    </div>
+                </div>
+
+                <!-- Step 3b: Place Picker (Custom Mix only) -->
+                <div class="q-step hidden" id="q-step-3b">
+                    <h3 data-i18n="q3b_title">📍 Select Places</h3>
+                    <p data-i18n="q3b_desc">Pick the specific places you want to visit</p>
+                    <div class="q-place-picker" id="q-place-picker">
+                        <!-- Dynamically populated per city -->
                     </div>
                 </div>
 
@@ -391,6 +423,19 @@
                     <button class="btn-back hidden" id="q-back" data-i18n="btn_back">← Back</button>
                     <button class="btn-next" id="q-next" data-i18n="btn_next">Next →</button>
                     <button class="btn-submit hidden" id="q-submit" data-i18n="btn_submit">🙏 Plan My Yatra</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- City Picker Popover -->
+        <div class="city-picker-overlay hidden" id="city-picker-overlay">
+            <div class="city-picker-popover" id="city-picker-popover">
+                <div class="city-picker-header">
+                    <h3 id="city-picker-title">Select a City</h3>
+                    <button class="city-picker-close" id="city-picker-close">✕</button>
+                </div>
+                <div class="city-picker-grid" id="city-picker-grid">
+                    <!-- Dynamically populated -->
                 </div>
             </div>
         </div>

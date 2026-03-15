@@ -1,5 +1,3 @@
-
-
 const llm = require('../llm/connector');
 const db = require('../db/database');
 const { RECOMMENDER_PROMPT, getLanguageInstruction } = require('../prompts/system-prompts');
@@ -7,22 +5,18 @@ const { formatPlaceForLLM, filterByInterests } = require('../utils/helpers');
 const { rankPlaces } = require('./scoring');
 const { enforceDiversity } = require('./diversity');
 
-
 async function recommend(params) {
     const {
         query = '', cities = [], interests = [], limit = 8,
         language = 'en', group_type = 'family', budget_level = 'medium'
     } = params;
 
-    
     let candidates = [];
 
-    
     if (query) {
         candidates = db.searchPlaces(query);
     }
 
-    
     if (candidates.length < limit * 3) {
         const cityList = cities.length > 0 ? cities : db.getCities();
         for (const city of cityList) {
@@ -32,17 +26,14 @@ async function recommend(params) {
         candidates = [...new Map(candidates.map(p => [p.id, p])).values()];
     }
 
-    
     if (interests.length > 0) {
         const filtered = filterByInterests(candidates, interests);
         if (filtered.length >= 3) candidates = filtered;
     }
 
-    
     const intent = { interests, cities, group_type, budget_level };
     candidates = rankPlaces(candidates, intent);
 
-    
     candidates = enforceDiversity(candidates, {
         maxPerCategory: 3,
         cities,
@@ -53,7 +44,6 @@ async function recommend(params) {
 
     console.log(`[Recommender] ${candidates.length} diversified candidates (top: ${candidates.slice(0, 3).map(p => p.name).join(', ')})`);
 
-    
     const topCandidates = candidates.slice(0, Math.min(25, candidates.length));
     const formatted = topCandidates.map(formatPlaceForLLM);
 

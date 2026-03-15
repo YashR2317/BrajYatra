@@ -1,10 +1,5 @@
-/**
- * BrajYatra — AI Tirth Companion
- * Frontend Chat Application with i18n, Questionnaire, Itinerary Editing, Google Maps Links
- */
-
 (function () {
-    // ==================== i18n Translations ====================
+
     const TRANSLATIONS = {
         en: {
             logo_sub: 'Hare Krishna · AI Tirth Companion',
@@ -82,6 +77,9 @@
             online_status: 'Online',
             server_offline: 'Server Offline',
             llm_offline: 'LLM Offline',
+            back_home: 'Back to Home',
+            q3b_title: '📍 Select Places',
+            q3b_desc: 'Pick the specific places you want to visit',
             q6_title: '📍 Starting Point & Time',
             q6_desc: 'Where are you starting from and when do you arrive?',
             q6_from_label: 'Starting from (city, station, or airport):',
@@ -98,7 +96,13 @@
             query_prasadam: 'Recommend must-try prasadam and local food in Mathura and Vrindavan',
             query_parikrama: 'Plan a complete Braj 84 Kos Parikrama covering all sacred places',
             query_plan: 'Plan Your Yatra',
-            query_festivals: 'Tell me about upcoming festivals and events in Braj Dham'
+            query_festivals: 'Tell me about upcoming festivals and events in Braj Dham',
+            query_darshan_city: 'Recommend the best temples for darshan in {city}',
+            query_prasadam_city: 'Recommend must-try prasadam and local food in {city}',
+            query_weather_city: "What's the weather like in {city} today?",
+            city_picker_darshan: 'Select city for Temple Darshan Guide',
+            city_picker_prasadam: 'Select city for Prasadam & Food',
+            city_picker_weather: 'Select city for Weather'
         },
         hi: {
             logo_sub: 'हरे कृष्ण · AI तीर्थ साथी',
@@ -176,6 +180,9 @@
             online_status: 'ऑनलाइन',
             server_offline: 'सर्वर ऑफ़लाइन',
             llm_offline: 'LLM ऑफ़लाइन',
+            back_home: 'वापस होम पर',
+            q3b_title: '📍 स्थान चुनें',
+            q3b_desc: 'वे विशिष्ट स्थान चुनें जिन्हें आप देखना चाहते हैं',
             q6_title: '📍 प्रारंभ स्थान एवं समय',
             q6_desc: 'आप कहाँ से आ रहे हैं और कब पहुँचेंगे?',
             q6_from_label: 'प्रारंभ स्थान (शहर, स्टेशन, या हवाई अड्डा):',
@@ -192,11 +199,16 @@
             query_prasadam: 'मथुरा और वृन्दावन में जरूर खाने वाले प्रसादम और स्थानीय भोजन की सिफारिश करें',
             query_parikrama: 'सभी पवित्र स्थलों को कवर करते हुए पूर्ण ब्रज 84 कोस परिक्रमा की योजना बनाएं',
             query_plan: 'अपनी यात्रा की योजना बनाएं',
-            query_festivals: 'ब्रज धाम में आने वाले त्यौहारों और उत्सवों के बारे में बताएं'
+            query_festivals: 'ब्रज धाम में आने वाले त्यौहारों और उत्सवों के बारे में बताएं',
+            query_darshan_city: '{city} में दर्शन के लिए सर्वश्रेष्ठ मंदिरों की सिफारिश करें',
+            query_prasadam_city: '{city} में जरूर खाने वाले प्रसादम और स्थानीय भोजन की सिफारिश करें',
+            query_weather_city: 'आज {city} में मौसम कैसा है?',
+            city_picker_darshan: 'मंदिर दर्शन गाइड के लिए शहर चुनें',
+            city_picker_prasadam: 'प्रसादम एवं भोजन के लिए शहर चुनें',
+            city_picker_weather: 'मौसम के लिए शहर चुनें'
         }
     };
 
-    // ==================== State ====================
     let sessionId = localStorage.getItem('brajyatra_session') || null;
     let currentLanguage = localStorage.getItem('brajyatra_lang') || 'en';
     let isLoading = false;
@@ -204,12 +216,15 @@
     const totalSteps = 6;
     let currentItinerary = null;
     let editMode = false;
+    let currentAbortController = null;
+    let pendingCityPickerQueryKey = null;
 
     const prefs = {
         yatraType: '',
         days: 3,
         cities: [],
         interests: [],
+        selectedPlaces: [],
         pace: 'moderate',
         group: 'family',
         startLocation: '',
@@ -258,11 +273,11 @@
         'religious': '/assets/images/prem_mandir.png',
     };
 
-    // ==================== DOM ====================
     const messagesContainer = document.getElementById('messages-container');
     const welcomeScreen = document.getElementById('welcome-screen');
     const messageInput = document.getElementById('message-input');
     const btnSend = document.getElementById('btn-send');
+    const btnStop = document.getElementById('btn-stop');
     const btnNewChat = document.getElementById('btn-new-chat');
     const btnMenu = document.getElementById('btn-menu');
     const sidebar = document.getElementById('sidebar');
@@ -274,7 +289,6 @@
     const btnNext = document.getElementById('q-next');
     const btnSubmit = document.getElementById('q-submit');
 
-    // ==================== i18n ====================
     function t(key) {
         return (TRANSLATIONS[currentLanguage] && TRANSLATIONS[currentLanguage][key]) || TRANSLATIONS.en[key] || key;
     }
@@ -283,24 +297,20 @@
         currentLanguage = lang;
         localStorage.setItem('brajyatra_lang', lang);
 
-        // Update toggle buttons
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.lang === lang);
         });
 
-        // Update all data-i18n elements
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             el.textContent = t(key);
         });
 
-        // Update placeholders
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             el.placeholder = t(key);
         });
 
-        // Update welcome desc with HTML formatting
         const descEl = document.querySelector('[data-i18n="welcome_desc"]');
         if (descEl) {
             if (lang === 'en') {
@@ -311,7 +321,6 @@
         }
     }
 
-    // ==================== Theme ====================
     function initTheme() {
         const saved = localStorage.getItem('brajyatra_theme') || 'light';
         applyTheme(saved);
@@ -320,10 +329,10 @@
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('brajyatra_theme', theme);
-        // Update meta theme-color
+
         const meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.content = theme === 'dark' ? '#0d1421' : '#fef9ef';
-        // Update toggle button
+
         const btn = document.getElementById('theme-toggle-btn');
         if (btn) {
             const icon = btn.querySelector('.theme-icon');
@@ -338,7 +347,6 @@
         applyTheme(current === 'dark' ? 'light' : 'dark');
     }
 
-    // ==================== Init ====================
     function init() {
         initTheme();
         bindEvents();
@@ -346,6 +354,9 @@
         checkHealth();
         loadCities();
         autoResizeTextarea();
+        if (sessionId) {
+            loadChatHistory(sessionId);
+        }
     }
 
     function bindEvents() {
@@ -364,6 +375,7 @@
         }
 
         btnSend.addEventListener('click', handleSend);
+        if (btnStop) btnStop.addEventListener('click', stopChat);
         messageInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
         });
@@ -374,18 +386,25 @@
 
         btnNewChat.addEventListener('click', startNewChat);
 
-        // Language toggle
+        const btnBackLanding = document.getElementById('btn-back-landing');
+        if (btnBackLanding) {
+            btnBackLanding.addEventListener('click', () => {
+                if (typeof window.goToLanding === 'function') window.goToLanding();
+            });
+        }
+
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
         });
 
-        // Quick action & welcome card clicks
         document.querySelectorAll('.quick-btn, .welcome-card').forEach(btn => {
             btn.addEventListener('click', () => {
                 const action = btn.dataset.action;
                 const queryKey = btn.dataset.queryKey;
                 if (action === 'questionnaire') {
                     openQuestionnaire();
+                } else if (queryKey && ['query_darshan', 'query_prasadam', 'query_weather'].includes(queryKey)) {
+                    openCityPicker(queryKey);
                 } else if (queryKey) {
                     messageInput.value = t(queryKey);
                     handleSend();
@@ -411,7 +430,6 @@
         messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
     }
 
-    // ==================== City Loading ====================
     async function loadCities() {
         try {
             const res = await fetch('/api/cities');
@@ -424,6 +442,37 @@
             }));
             renderWelcomeCities(fallback);
             renderQuestionnaireCities(fallback);
+        }
+    }
+
+    async function loadChatHistory(sid) {
+        try {
+            const res = await fetch(`/api/session/${sid}/history`);
+            if (!res.ok) return;
+            const history = await res.json();
+            if (!history || history.length === 0) return;
+
+            if (welcomeScreen) welcomeScreen.style.display = 'none';
+
+            for (const msg of history) {
+                if (msg.role === 'user') {
+                    appendMessage('user', msg.content);
+                } else if (msg.role === 'assistant') {
+                    let parsed = null;
+                    try { parsed = JSON.parse(msg.content); } catch (e) { }
+
+                    if (parsed && parsed.days && Array.isArray(parsed.days)) {
+                        renderItinerary(parsed);
+                    } else if (parsed && parsed.recommendations) {
+                        renderRecommendations(parsed.recommendations, parsed.summary);
+                    } else {
+                        appendMessage('assistant', msg.content);
+                    }
+                }
+            }
+            scrollToBottom();
+        } catch (e) {
+            console.warn('[BrajYatra] Failed to load chat history:', e.message);
         }
     }
 
@@ -456,7 +505,6 @@
         });
     }
 
-    // ==================== Health Check ====================
     async function checkHealth() {
         try {
             const res = await fetch('/api/health');
@@ -478,7 +526,6 @@
         }
     }
 
-    // ==================== Questionnaire ====================
     function openQuestionnaire() {
         currentStep = 1;
         resetQuestionnaire();
@@ -494,12 +541,15 @@
         prefs.days = 3;
         prefs.cities = [];
         prefs.interests = [];
+        prefs.selectedPlaces = [];
         prefs.pace = 'moderate';
         prefs.group = 'family';
         prefs.startLocation = '';
         prefs.firstCity = '';
         prefs.startTime = 'forenoon';
         document.querySelectorAll('.q-option.selected, .q-city.selected, .q-chip.selected, .q-chip-sm.selected').forEach(el => el.classList.remove('selected'));
+        const placePicker = document.getElementById('q-place-picker');
+        if (placePicker) placePicker.innerHTML = '';
         document.querySelectorAll('.q-day-btn').forEach(el => el.classList.toggle('active', el.dataset.value === '3'));
         document.querySelectorAll('.q-option-sm').forEach(el => {
             el.classList.remove('active', 'selected');
@@ -515,28 +565,69 @@
 
     function showStep(step) {
         currentStep = step;
+        const step3b = document.getElementById('q-step-3b');
+        if (step3b) step3b.classList.add('hidden');
+
         for (let i = 1; i <= totalSteps; i++) {
             const el = document.getElementById(`q-step-${i}`);
             if (el) el.classList.toggle('hidden', i !== step);
         }
+
+        if (step === '3b') {
+            for (let i = 1; i <= totalSteps; i++) {
+                const el = document.getElementById(`q-step-${i}`);
+                if (el) el.classList.add('hidden');
+            }
+            if (step3b) step3b.classList.remove('hidden');
+        }
+
         document.querySelectorAll('.step-dot').forEach(dot => {
             const s = parseInt(dot.dataset.step);
             dot.classList.remove('active', 'done');
-            if (s === step) dot.classList.add('active');
-            else if (s < step) dot.classList.add('done');
+            const numStep = step === '3b' ? 3.5 : step;
+            if (s === Math.ceil(numStep)) dot.classList.add('active');
+            else if (s < numStep) dot.classList.add('done');
         });
+
         btnBack.classList.toggle('hidden', step === 1);
         btnNext.classList.toggle('hidden', step === totalSteps);
         btnSubmit.classList.toggle('hidden', step !== totalSteps);
 
-        // When entering step 6, populate first city options from selected cities
         if (step === 6) {
             populateFirstCityOptions();
         }
+        if (step === '3b') {
+            populatePlacePicker();
+        }
     }
 
-    function nextStep() { if (currentStep < totalSteps) showStep(currentStep + 1); }
-    function prevStep() { if (currentStep > 1) showStep(currentStep - 1); }
+    function nextStep() {
+        if (currentStep === 3 && prefs.yatraType === 'mixed') {
+            showStep('3b');
+            return;
+        }
+        if (currentStep === '3b') {
+            showStep(5);
+            return;
+        }
+        if (currentStep === 3 && prefs.yatraType !== 'mixed') {
+            showStep(4);
+            return;
+        }
+        if (currentStep < totalSteps) showStep(currentStep + 1);
+    }
+
+    function prevStep() {
+        if (currentStep === '3b') {
+            showStep(3);
+            return;
+        }
+        if (currentStep === 5 && prefs.yatraType === 'mixed') {
+            showStep('3b');
+            return;
+        }
+        if (currentStep > 1) showStep(currentStep - 1);
+    }
 
     function bindQuestionnaireEvents() {
         document.querySelectorAll('#q-step-1 .q-option').forEach(btn => {
@@ -574,7 +665,6 @@
             });
         });
 
-        // Step 6: Start time selection
         document.querySelectorAll('.q-time-options .q-chip-sm').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.q-time-options .q-chip-sm').forEach(b => b.classList.remove('active', 'selected'));
@@ -603,11 +693,55 @@
     function updatePrefs() {
         prefs.cities = Array.from(document.querySelectorAll('.q-city.selected')).map(el => el.dataset.value);
         prefs.interests = Array.from(document.querySelectorAll('#q-step-4 .q-chip.selected')).map(el => el.dataset.value);
+        prefs.selectedPlaces = Array.from(document.querySelectorAll('#q-place-picker .q-place-item.selected')).map(el => el.dataset.placeName);
+    }
+
+    async function populatePlacePicker() {
+        const container = document.getElementById('q-place-picker');
+        if (!container) return;
+
+        const selectedCities = prefs.cities.length > 0 ? prefs.cities : Object.keys(CITY_IMAGES);
+        container.innerHTML = '<div class="city-places-loading">Loading places...</div>';
+
+        let html = '';
+        for (const city of selectedCities) {
+            try {
+                const res = await fetch(`/api/places?city=${encodeURIComponent(city)}`);
+                const places = await res.json();
+                if (!places || places.length === 0) continue;
+
+                html += `<div class="q-place-city-group">`;
+                html += `<h4 class="q-place-city-title">📍 ${city}</h4>`;
+                html += `<div class="q-place-list">`;
+                for (const p of places) {
+                    const isSelected = prefs.selectedPlaces.includes(p.name) ? ' selected' : '';
+                    html += `<div class="q-place-item${isSelected}" data-place-name="${p.name}" data-city="${city}">`;
+                    html += `<span class="q-place-check">${isSelected ? '✓' : ''}</span>`;
+                    html += `<span class="q-place-name">${p.name}</span>`;
+                    html += `<span class="q-place-cat-badge">${p.category || ''}</span>`;
+                    html += `</div>`;
+                }
+                html += `</div></div>`;
+            } catch (e) {
+                console.warn(`Failed to load places for ${city}:`, e);
+            }
+        }
+
+        container.innerHTML = html || '<p>No places found.</p>';
+
+        container.querySelectorAll('.q-place-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('selected');
+                const check = item.querySelector('.q-place-check');
+                if (check) check.textContent = item.classList.contains('selected') ? '✓' : '';
+                updatePrefs();
+            });
+        });
     }
 
     function submitQuestionnaire() {
         updatePrefs();
-        // Capture step 6 fields
+
         const startInput = document.getElementById('q-start-location');
         if (startInput) prefs.startLocation = startInput.value.trim();
 
@@ -631,7 +765,9 @@
             'evening': 'evening (4-6 PM)'
         };
         const cities = prefs.cities.length > 0 ? prefs.cities.join(', ') : 'Mathura, Vrindavan';
+        const isCustomMix = prefs.yatraType === 'mixed';
         const interests = prefs.interests.length > 0 ? prefs.interests.join(', ') : 'temples, heritage, food';
+        const selectedPlacesStr = prefs.selectedPlaces.length > 0 ? prefs.selectedPlaces.join(', ') : '';
         const yatraType = yatraNames[prefs.yatraType] || 'spiritual journey';
 
         let cityOrder = '';
@@ -644,18 +780,25 @@
         if (currentLanguage === 'hi') {
             if (prefs.firstCity) cityOrder = ` यात्रा ${prefs.firstCity} से शुरू करें।`;
             if (prefs.startLocation) startInfo = ` मैं ${prefs.startLocation} से यात्रा कर रहा/रही हूँ।`;
-            msg = `${cities} को कवर करते हुए ${prefs.days}-दिन की ${yatraType} यात्रा की योजना बनाएं। मेरी रुचियाँ: ${interests}। गति: ${paceNames[prefs.pace] || 'मध्यम'}। यात्रा समूह: ${prefs.group || 'परिवार'}।${startInfo}${cityOrder} मैं ${startTimeStr} में पहुँचूँगा/शुरू करूँगा। प्रत्येक शहर के लिए अलग Google Maps मार्ग बनाएं। दर्शन के लिए सर्वश्रेष्ठ मंदिर, स्थानीय प्रसादम की सिफारिशें, और व्यावहारिक सुझाव शामिल करें।`;
+            if (isCustomMix && selectedPlacesStr) {
+                msg = `${cities} को कवर करते हुए ${prefs.days}-दिन की ${yatraType} यात्रा की योजना बनाएं। मैं विशेष रूप से इन स्थानों पर जाना चाहता/चाहती हूँ: ${selectedPlacesStr}। गति: ${paceNames[prefs.pace] || 'मध्यम'}। यात्रा समूह: ${prefs.group || 'परिवार'}।${startInfo}${cityOrder} मैं ${startTimeStr} में पहुँचूँगा/शुरू करूँगा। प्रत्येक शहर के लिए अलग Google Maps मार्ग बनाएं। दर्शन के लिए सर्वश्रेष्ठ मंदिर, स्थानीय प्रसादम की सिफारिशें, और व्यावहारिक सुझाव शामिल करें।`;
+            } else {
+                msg = `${cities} को कवर करते हुए ${prefs.days}-दिन की ${yatraType} यात्रा की योजना बनाएं। मेरी रुचियाँ: ${interests}। गति: ${paceNames[prefs.pace] || 'मध्यम'}। यात्रा समूह: ${prefs.group || 'परिवार'}।${startInfo}${cityOrder} मैं ${startTimeStr} में पहुँचूँगा/शुरू करूँगा। प्रत्येक शहर के लिए अलग Google Maps मार्ग बनाएं। दर्शन के लिए सर्वश्रेष्ठ मंदिर, स्थानीय प्रसादम की सिफारिशें, और व्यावहारिक सुझाव शामिल करें।`;
+            }
         } else {
             if (prefs.firstCity) cityOrder = ` Start the itinerary from ${prefs.firstCity} first.`;
             if (prefs.startLocation) startInfo = ` I am travelling from ${prefs.startLocation}.`;
-            msg = `Plan a ${prefs.days}-day ${yatraType} itinerary covering ${cities}. My interests include: ${interests}. Pace: ${paceNames[prefs.pace] || 'moderate'}. Travelling as: ${prefs.group || 'family'}.${startInfo}${cityOrder} I will arrive/start in the ${startTimeStr}. Generate separate Google Maps routes for each city. Include the best temples for darshan, local prasadam recommendations, and practical tips.`;
+            if (isCustomMix && selectedPlacesStr) {
+                msg = `Plan a ${prefs.days}-day ${yatraType} itinerary covering ${cities}. I specifically want to visit these places: ${selectedPlacesStr}. Pace: ${paceNames[prefs.pace] || 'moderate'}. Travelling as: ${prefs.group || 'family'}.${startInfo}${cityOrder} I will arrive/start in the ${startTimeStr}. Generate separate Google Maps routes for each city. Include the best temples for darshan, local prasadam recommendations, and practical tips.`;
+            } else {
+                msg = `Plan a ${prefs.days}-day ${yatraType} itinerary covering ${cities}. My interests include: ${interests}. Pace: ${paceNames[prefs.pace] || 'moderate'}. Travelling as: ${prefs.group || 'family'}.${startInfo}${cityOrder} I will arrive/start in the ${startTimeStr}. Generate separate Google Maps routes for each city. Include the best temples for darshan, local prasadam recommendations, and practical tips.`;
+            }
         }
 
         messageInput.value = msg;
         handleSend();
     }
 
-    // ==================== Chat Flow ====================
     async function handleSend() {
         const text = messageInput.value.trim();
         if (!text || isLoading) return;
@@ -665,15 +808,20 @@
         messageInput.value = '';
         messageInput.style.height = 'auto';
         btnSend.disabled = true;
+        btnSend.classList.add('hidden');
+        btnStop.classList.remove('hidden');
 
         const typingEl = showTyping();
         isLoading = true;
+
+        currentAbortController = new AbortController();
 
         try {
             const res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text, sessionId, language: currentLanguage })
+                body: JSON.stringify({ message: text, sessionId, language: currentLanguage }),
+                signal: currentAbortController.signal
             });
             const data = await res.json();
 
@@ -693,18 +841,35 @@
                     break;
                 default:
                     appendMessage('assistant', data.text);
+                    if (data.groundingMetadata && data.groundingMetadata.sources && data.groundingMetadata.sources.length > 0) {
+                        renderGroundingSources(data.groundingMetadata);
+                    }
             }
         } catch (error) {
             removeTyping(typingEl);
-            appendMessage('assistant', t('error_msg'));
+            if (error.name === 'AbortError') {
+                messageInput.value = text;
+                btnSend.disabled = false;
+            } else {
+                appendMessage('assistant', t('error_msg'));
+            }
         }
 
+        currentAbortController = null;
         isLoading = false;
+        btnStop.classList.add('hidden');
+        btnSend.classList.remove('hidden');
+        if (messageInput.value.trim().length > 0) btnSend.disabled = false;
         scrollToBottom();
         closeSidebar();
     }
 
-    // ==================== Google Maps Helpers ====================
+    function stopChat() {
+        if (currentAbortController) {
+            currentAbortController.abort();
+        }
+    }
+
     function isActualPlace(slot) {
         if (!slot || !slot.place) return false;
         if (slot.is_meal) return false;
@@ -747,7 +912,6 @@
         return url;
     }
 
-    // ==================== Image Helpers ====================
     function getPlaceImage(placeName, city, category) {
         if (!placeName) return CITY_IMAGES[city] || '/assets/images/krishna_janmabhoomi.png';
         const lower = placeName.toLowerCase();
@@ -759,7 +923,6 @@
         return '/assets/images/krishna_janmabhoomi.png';
     }
 
-    // ==================== Message Rendering ====================
     function appendMessage(role, text) {
         const div = document.createElement('div');
         div.className = `message ${role}`;
@@ -780,17 +943,45 @@
         scrollToBottom();
     }
 
-    // ==================== Itinerary Rendering ====================
+    function renderGroundingSources(metadata) {
+        if (!metadata || !metadata.sources || metadata.sources.length === 0) return;
+
+        const uniqueSources = [];
+        const seen = new Set();
+        for (const s of metadata.sources) {
+            if (s.url && !seen.has(s.url)) {
+                seen.add(s.url);
+                uniqueSources.push(s);
+            }
+        }
+        if (uniqueSources.length === 0) return;
+
+        const sourcesDiv = document.createElement('div');
+        sourcesDiv.className = 'grounding-sources';
+        sourcesDiv.innerHTML = `
+            <div class="grounding-header">🌐 Web Sources</div>
+            <div class="grounding-links">
+                ${uniqueSources.slice(0, 5).map(s =>
+            `<a href="${escapeHtml(s.url)}" target="_blank" rel="noopener" class="grounding-link">
+                        <span class="grounding-link-icon">🔗</span>
+                        <span class="grounding-link-title">${escapeHtml(s.title || 'Source')}</span>
+                    </a>`
+        ).join('')}
+            </div>
+        `;
+        messagesContainer.appendChild(sourcesDiv);
+        scrollToBottom();
+    }
+
     function renderItinerary(itinerary) {
         if (!itinerary) return appendMessage('assistant', 'Could not generate itinerary. Please try again.');
 
-        currentItinerary = JSON.parse(JSON.stringify(itinerary)); // deep clone for editing
+        currentItinerary = JSON.parse(JSON.stringify(itinerary));
 
         const card = document.createElement('div');
         card.className = 'itinerary-card';
         card.id = 'itinerary-card-' + Date.now();
 
-        // Header with edit toggle
         const header = document.createElement('div');
         header.className = 'itinerary-header';
         header.innerHTML = `
@@ -807,7 +998,6 @@
         `;
         card.appendChild(header);
 
-        // Live Weather Banner
         const weather = itinerary.live_weather;
         if (weather) {
             const weatherDiv = document.createElement('div');
@@ -829,7 +1019,6 @@
             card.appendChild(weatherDiv);
         }
 
-        // Full Route button
         if (itinerary.google_maps_url) {
             const routeLink = document.createElement('a');
             routeLink.className = 'route-btn';
@@ -840,10 +1029,8 @@
             card.appendChild(routeLink);
         }
 
-        // Day data
         const days = itinerary.days || [];
 
-        // Per-City Route Buttons Section
         const cityGroups = groupDaysByCity(days);
         if (Object.keys(cityGroups).length > 1) {
             const cityRoutesDiv = document.createElement('div');
@@ -877,7 +1064,6 @@
             card.appendChild(cityRoutesDiv);
         }
 
-        // Day Tabs & Content
         try {
             if (days.length > 0) {
                 const tabs = document.createElement('div');
@@ -904,7 +1090,6 @@
                         content.appendChild(overview);
                     }
 
-                    // Per-day route button
                     const dayRouteUrl = day.google_maps_url || buildDayRouteUrl(day);
                     if (dayRouteUrl) {
                         const dayRouteLink = document.createElement('a');
@@ -917,7 +1102,6 @@
                         content.appendChild(dayRouteLink);
                     }
 
-                    // Slots
                     const slotsContainer = document.createElement('div');
                     slotsContainer.className = 'slots-container';
                     slotsContainer.dataset.dayIndex = i;
@@ -930,7 +1114,6 @@
                     });
                     content.appendChild(slotsContainer);
 
-                    // Add Place button (hidden until edit mode)
                     const addBtn = document.createElement('button');
                     addBtn.className = 'add-place-btn edit-only';
                     addBtn.textContent = t('add_place');
@@ -945,7 +1128,6 @@
             console.error('[BrajYatra] Error rendering days:', dayErr);
         }
 
-        // Tips
         const tips = itinerary.tips || [];
         if (tips.length > 0) {
             const tipsSection = document.createElement('div');
@@ -957,7 +1139,6 @@
             card.appendChild(tipsSection);
         }
 
-        // Budget Estimate
         const budget = itinerary.budget;
         if (budget && budget.total > 0) {
             const budgetSection = document.createElement('div');
@@ -1002,7 +1183,6 @@
             card.appendChild(budgetSection);
         }
 
-        // Alternate Indoor Recommendations
         const alternates = itinerary.alternate_indoor || [];
         if (alternates.length > 0) {
             const altSection = document.createElement('div');
@@ -1016,19 +1196,16 @@
 
         messagesContainer.appendChild(card);
 
-        // Bind edit toggle
         const editBtn = card.querySelector('.edit-toggle-btn');
         if (editBtn) {
             editBtn.addEventListener('click', () => toggleEditMode(card));
         }
 
-        // Ensure scroll to bottom after itinerary renders fully
         scrollToBottom();
         setTimeout(scrollToBottom, 100);
         setTimeout(scrollToBottom, 500);
     }
 
-    // Helper: group days by city for per-city routes
     function groupDaysByCity(days) {
         const groups = {};
         for (const day of (days || [])) {
@@ -1072,6 +1249,8 @@
             </div>
             <div class="slot-desc">${escapeHtml(slot.description || '')}</div>
             ${slot.duration_mins ? `<span class="rec-badge" style="margin-top:6px;display:inline-block">⏱️ ${slot.duration_mins} min</span>` : ''}
+            ${isPlace ? `<span class="rec-badge" style="margin-top:6px;display:inline-block;margin-left:4px">🎫 ${slot.entry_fee > 0 ? '₹' + slot.entry_fee : 'Free'}</span>` : ''}
+            ${slot.travel_cost_from_previous > 0 ? `<span class="rec-badge" style="margin-top:6px;display:inline-block;margin-left:4px">🚗 ~₹${slot.travel_cost_from_previous}</span>` : ''}
             ${slot.tip ? `<span class="slot-tip">💡 ${escapeHtml(slot.tip)}</span>` : ''}
         </div>
         <button class="slot-remove-btn edit-only" title="Remove this place" data-slot="${slotIdx}" data-day="${dayIdx}">✕</button>
@@ -1093,7 +1272,6 @@
         card.querySelectorAll('.day-content').forEach((content, i) => content.classList.toggle('hidden', i !== dayIndex));
     }
 
-    // ==================== Itinerary Editing ====================
     function toggleEditMode(card) {
         editMode = !editMode;
         card.classList.toggle('edit-mode', editMode);
@@ -1108,13 +1286,11 @@
         currentItinerary.days[dayIdx].slots.splice(slotIdx, 1);
         rerenderDaySlots(card, dayIdx);
 
-        // Show replacement suggestions if the removed slot was a real place
         if (removedSlot && isActualPlace(removedSlot)) {
             showReplacementSuggestions(dayIdx, slotIdx, removedSlot, removedCity, card);
         }
     }
 
-    // ==================== Replacement Suggestions ====================
     function getItineraryPlaceIds() {
         if (!currentItinerary) return [];
         const ids = [];
@@ -1127,15 +1303,13 @@
     }
 
     async function showReplacementSuggestions(dayIdx, insertIdx, removedSlot, city, card) {
-        // Find the slots container for this day
+
         const container = card.querySelector(`.slots-container[data-day-index="${dayIdx}"]`);
         if (!container) return;
 
-        // Remove any existing panel
         const existing = container.parentElement.querySelector('.replacement-panel');
         if (existing) existing.remove();
 
-        // Create panel
         const panel = document.createElement('div');
         panel.className = 'replacement-panel';
         panel.innerHTML = `
@@ -1150,10 +1324,8 @@
         `;
         container.after(panel);
 
-        // Bind close
         panel.querySelector('.replacement-panel-close').addEventListener('click', () => panel.remove());
 
-        // Fetch suggestions
         try {
             const excludeIds = getItineraryPlaceIds().join(',');
             const category = removedSlot.category || '';
@@ -1187,7 +1359,6 @@
                     <button class="suggestion-add-btn">+ Add</button>
                 `;
 
-                // Bind add button
                 sCard.querySelector('.suggestion-add-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
                     const day = currentItinerary.days[dayIdx];
@@ -1204,7 +1375,6 @@
                         google_maps_url: buildPlaceMapUrl(place.name, city)
                     };
 
-                    // Insert at the same position
                     day.slots.splice(insertIdx, 0, newSlot);
                     rerenderDaySlots(card, dayIdx);
                     panel.remove();
@@ -1231,7 +1401,6 @@
             container.appendChild(createSlotElement(slot, day.city, slotIdx, dayIdx));
         });
 
-        // Update day route link
         const routeLink = card.querySelector(`.day-route-btn[data-day-index="${dayIdx}"]`);
         if (routeLink) {
             const newUrl = buildDayRouteUrl(day);
@@ -1242,7 +1411,7 @@
     }
 
     function showAddPlaceForm(addBtn, dayIdx, card) {
-        // Remove existing form if any
+
         const existingForm = addBtn.parentElement.querySelector('.add-place-form');
         if (existingForm) { existingForm.remove(); return; }
 
@@ -1282,7 +1451,6 @@
         form.querySelector('.add-place-cancel').addEventListener('click', () => form.remove());
     }
 
-    // ==================== Recommendation Rendering ====================
     function renderRecommendations(recommendations, summary) {
         if (!recommendations || recommendations.length === 0) {
             return appendMessage('assistant', summary || 'Could not find recommendations. Try asking differently!');
@@ -1322,7 +1490,6 @@
         scrollToBottom();
     }
 
-    // ==================== Typing Indicator ====================
     function showTyping() {
         const div = document.createElement('div');
         div.className = 'typing-indicator';
@@ -1337,7 +1504,6 @@
 
     function removeTyping(el) { if (el && el.parentNode) el.parentNode.removeChild(el); }
 
-    // ==================== Helpers ====================
     function scrollToBottom() {
         requestAnimationFrame(() => { messagesContainer.scrollTop = messagesContainer.scrollHeight; });
     }
@@ -1404,6 +1570,67 @@
         sidebar.classList.remove('open');
         const overlay = document.querySelector('.sidebar-overlay');
         if (overlay) overlay.classList.remove('active');
+    }
+
+    function openCityPicker(queryKey) {
+        pendingCityPickerQueryKey = queryKey;
+        const overlay = document.getElementById('city-picker-overlay');
+        const grid = document.getElementById('city-picker-grid');
+        const title = document.getElementById('city-picker-title');
+        if (!overlay || !grid) return;
+
+        const titleMap = {
+            'query_darshan': 'city_picker_darshan',
+            'query_prasadam': 'city_picker_prasadam',
+            'query_weather': 'city_picker_weather'
+        };
+        if (title) title.textContent = t(titleMap[queryKey] || 'Select a City');
+
+        grid.innerHTML = Object.entries(CITY_IMAGES).map(([name, img]) => `
+            <div class="city-picker-item" data-city="${name}">
+                <img src="${img}" alt="${name}" loading="lazy">
+                <span>${name}</span>
+            </div>
+        `).join('');
+
+        grid.querySelectorAll('.city-picker-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const city = item.dataset.city;
+                selectCityForQuery(city);
+            });
+        });
+
+        overlay.classList.remove('hidden');
+        closeSidebar();
+
+        const closeBtn = document.getElementById('city-picker-close');
+        if (closeBtn) closeBtn.onclick = closeCityPicker;
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeCityPicker();
+        });
+    }
+
+    function closeCityPicker() {
+        const overlay = document.getElementById('city-picker-overlay');
+        if (overlay) overlay.classList.add('hidden');
+        pendingCityPickerQueryKey = null;
+    }
+
+    function selectCityForQuery(city) {
+        if (!pendingCityPickerQueryKey) return;
+
+        const queryKeyMap = {
+            'query_darshan': 'query_darshan_city',
+            'query_prasadam': 'query_prasadam_city',
+            'query_weather': 'query_weather_city'
+        };
+        const templateKey = queryKeyMap[pendingCityPickerQueryKey];
+        if (!templateKey) return;
+
+        const query = t(templateKey).replace('{city}', city);
+        closeCityPicker();
+        messageInput.value = query;
+        handleSend();
     }
 
     init();

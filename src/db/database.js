@@ -1,5 +1,3 @@
-
-
 const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
@@ -60,7 +58,6 @@ function initSchema() {
         );
     `);
 
-    
     const ftsExists = db.prepare(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='places_fts'"
     ).get();
@@ -92,8 +89,6 @@ function initSchema() {
         `);
     }
 }
-
-
 
 function getAllPlaces() {
     return getDB().prepare('SELECT * FROM places ORDER BY city, popularity_rank').all();
@@ -174,8 +169,6 @@ function haversine(lat1, lng1, lat2, lng2) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-
-
 function createSession(id) {
     getDB().prepare('INSERT INTO chat_sessions (id) VALUES (?)').run(id);
     return { id, created_at: new Date().toISOString() };
@@ -206,7 +199,6 @@ function getCities() {
     return getDB().prepare('SELECT DISTINCT city FROM places ORDER BY city').all().map(r => r.city);
 }
 
-
 function getPlacesByMultipleCities(cities) {
     if (!cities || cities.length === 0) return getAllPlaces();
     const placeholders = cities.map(() => '?').join(',');
@@ -214,7 +206,6 @@ function getPlacesByMultipleCities(cities) {
         `SELECT * FROM places WHERE LOWER(city) IN (${placeholders}) ORDER BY city, popularity_rank`
     ).all(...cities.map(c => c.toLowerCase()));
 }
-
 
 function getPlacesByTags(tags) {
     if (!tags || tags.length === 0) return [];
@@ -233,7 +224,6 @@ function getPlacesByTags(tags) {
     }
     return results;
 }
-
 
 function getCategoryDistribution(city = null) {
     if (city) {

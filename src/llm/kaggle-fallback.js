@@ -1,5 +1,3 @@
-
-
 const fetch = require('node-fetch');
 require('dotenv').config();
 
@@ -10,7 +8,6 @@ function getEndpoint() {
     if (!url) return null;
     return url.replace(/\/$/, '');
 }
-
 
 async function generateResponse(systemPrompt, userMessage, history = []) {
     const endpoint = getEndpoint();
@@ -45,7 +42,6 @@ async function generateResponse(systemPrompt, userMessage, history = []) {
         return { success: false, error: error.message, source: 'kaggle' };
     }
 }
-
 
 async function generateJSON(systemPrompt, userMessage) {
     const result = await generateResponse(

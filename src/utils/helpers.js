@@ -1,11 +1,7 @@
-
-
-
 function parseTags(tagsStr) {
     try { return JSON.parse(tagsStr || '[]'); }
     catch { return []; }
 }
-
 
 function formatPlaceForLLM(place) {
     return {
@@ -21,10 +17,10 @@ function formatPlaceForLLM(place) {
         highlight: !!place.highlight,
         tags: parseTags(place.tags),
         best_time_to_visit: place.best_time_to_visit || '',
-        google_maps_link: place.google_maps_link || ''
+        google_maps_link: place.google_maps_link || '',
+        entry_fee: parseFloat(place.entry_fee) || 0
     };
 }
-
 
 function filterByInterests(places, interests = []) {
     if (!interests || interests.length === 0) return places;
@@ -36,18 +32,15 @@ function filterByInterests(places, interests = []) {
     });
 }
 
-
 function sanitizeInput(text) {
     if (!text) return '';
     return text.replace(/<[^>]*>/g, '').trim().substring(0, 2000);
 }
 
-
 function generateId() {
     const { v4 } = require('uuid');
     return v4();
 }
-
 
 function filterByAccessibility(places, groupType = 'family') {
     if (!groupType || groupType === 'solo' || groupType === 'couple') return places;
@@ -57,18 +50,17 @@ function filterByAccessibility(places, groupType = 'family') {
         const cat = (p.category || '').toLowerCase();
 
         if (groupType === 'elderly') {
-            
+
             if (duration > 150) return false;
             if (cat.includes('trek') || cat.includes('hike')) return false;
         }
         if (groupType === 'family') {
-            
+
             if (duration > 180) return false;
         }
         return true;
     });
 }
-
 
 function filterByBudget(places, budgetLevel = 'medium') {
     if (!budgetLevel || budgetLevel === 'high') return places;

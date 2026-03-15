@@ -1,5 +1,3 @@
-
-
 const fetch = require('node-fetch');
 const llm = require('../llm/connector');
 const db = require('../db/database');
@@ -14,6 +12,17 @@ require('dotenv').config();
 const OWM_KEY = process.env.OPENWEATHER_API_KEY;
 const MAX_LLM_RETRIES = 3;
 
+const GROUP_TYPE_PEOPLE = {
+    solo: 1,
+    couple: 2,
+    family: 4,
+    group: 6,
+    elderly: 2
+};
+
+function groupTypeToPeople(groupType) {
+    return GROUP_TYPE_PEOPLE[(groupType || '').toLowerCase()] || 2;
+}
 
 async function plan(params) {
     const {
@@ -23,7 +32,6 @@ async function plan(params) {
 
     let targetCities = cities.length > 0 ? cities : ['Mathura', 'Vrindavan'];
 
-    
     let allPlaces = db.getPlacesByMultipleCities(targetCities);
     if (allPlaces.length === 0) {
         for (const city of targetCities) {
@@ -31,7 +39,6 @@ async function plan(params) {
         }
     }
 
-    
     if (interests.length > 0) {
         const filtered = filterByInterests(allPlaces, interests);
         const highlights = allPlaces.filter(p => p.highlight);
@@ -39,16 +46,13 @@ async function plan(params) {
         if (combined.length >= 8) allPlaces = combined;
     }
 
-    
     const primaryCity = targetCities[0];
     const weather = await fetchWeather(primaryCity);
 
-    
     const intent = { interests, cities: targetCities, group_type, budget_level, pace };
     allPlaces = rankPlaces(allPlaces, intent, weather);
     console.log(`[Itinerary] Scored ${allPlaces.length} places (top: ${allPlaces.slice(0, 3).map(p => `${p.name}(${p.score})`).join(', ')})`);
 
-    
     const placesPerDay = pace === 'relaxed' ? 4 : pace === 'intensive' ? 7 : 5;
     const totalNeeded = Math.min(allPlaces.length, days * placesPerDay);
     const minPerCity = targetCities.length > 0 ? Math.max(3, days * 2) : 0;
@@ -62,7 +66,6 @@ async function plan(params) {
     });
     console.log(`[Itinerary] Diversified: ${diversified.length} places`);
 
-    
     const placesByCity = {};
     for (const p of diversified) {
         if (!placesByCity[p.city]) placesByCity[p.city] = [];
@@ -75,13 +78,11 @@ async function plan(params) {
         }
     }
 
-    
     const selectedPlaces = [];
     for (const city of targetCities) {
         if (placesByCity[city]) selectedPlaces.push(...placesByCity[city]);
     }
 
-    
     const formattedPlaces = selectedPlaces.map(formatPlaceForLLM);
 
     const userPrompt = JSON.stringify({
@@ -98,7 +99,6 @@ async function plan(params) {
         available_places: formattedPlaces
     });
 
-    
     const langInstruction = getLanguageInstruction(language);
     let result = null;
     for (let attempt = 1; attempt <= MAX_LLM_RETRIES; attempt++) {
@@ -114,10 +114,9 @@ async function plan(params) {
     }
 
     if (!result || !result.success || !result.data?.days) {
-        return generateFallbackItinerary(placesByCity, targetCities, days, weather, budget_level);
+        return generateFallbackItinerary(placesByCity, targetCities, days, weather, budget_level, group_type);
     }
 
-    
     const itinerary = result.data;
     itinerary.google_maps_url = buildGoogleMapsRoute(itinerary);
     addPerDayRoutes(itinerary);
@@ -130,16 +129,15 @@ async function plan(params) {
         itinerary.alternate_indoor = getIndoorAlternatives(targetCities);
     }
 
-    
     itinerary.budget = estimateBudget({
         places: selectedPlaces,
         days,
-        budgetLevel: budget_level
+        budgetLevel: budget_level,
+        people: groupTypeToPeople(group_type)
     });
 
     return { success: true, itinerary, source: result.source, cities: targetCities };
 }
-
 
 async function fetchWeather(city) {
     const coords = getCityCentroid(city);
@@ -168,12 +166,11 @@ async function fetchWeather(city) {
     }
 }
 
-
 function isActualPlace(slot) {
     if (!slot || !slot.place) return false;
     if (slot.is_meal) return false;
     const lower = slot.place.toLowerCase();
-    
+
     const skipPatterns = [
         'travel to', 'travel from', 'transit', 'drive to', 'walk to', 'commute',
         'rest', 'leisure', 'break', 'check-in', 'check in', 'checkout', 'check out',
@@ -183,7 +180,6 @@ function isActualPlace(slot) {
     return !skipPatterns.some(pattern => lower.includes(pattern));
 }
 
-
 function isMealSlot(slot) {
     if (!slot || !slot.place) return false;
     if (slot.is_meal) return true;
@@ -192,11 +188,9 @@ function isMealSlot(slot) {
         lower.includes('prasadam break') || lower.includes('food break') || lower.includes('🍛');
 }
 
-
 function buildGoogleMapsRoute(itinerary) {
     if (!itinerary.days || itinerary.days.length === 0) return null;
 
-    
     const allStops = [];
     for (const day of itinerary.days) {
         for (const slot of (day.slots || [])) {
@@ -218,7 +212,6 @@ function buildGoogleMapsRoute(itinerary) {
     }
     return url;
 }
-
 
 function addPerDayRoutes(itinerary) {
     if (!itinerary.days) return;
@@ -243,22 +236,20 @@ function addPerDayRoutes(itinerary) {
     }
 }
 
-
 function addPlaceMapLinks(itinerary) {
     if (!itinerary.days) return;
     for (const day of itinerary.days) {
         for (const slot of (day.slots || [])) {
-            
+
             if (isMealSlot(slot)) {
                 slot.is_meal = true;
             }
-            
+
             if (!isActualPlace(slot)) continue;
             slot.google_maps_url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(slot.place + ', ' + (day.city || '') + ', India')}`;
         }
     }
 }
-
 
 function getIndoorAlternatives(cities) {
     const indoor = {
@@ -276,8 +267,7 @@ function getIndoorAlternatives(cities) {
     return result.slice(0, 5);
 }
 
-
-function generateFallbackItinerary(placesByCity, cities, days, weather, budgetLevel = 'medium') {
+function generateFallbackItinerary(placesByCity, cities, days, weather, budgetLevel = 'medium', groupType = 'family') {
     const itinerary = {
         title: `${days}-Day ${cities.join(' & ')} Sacred Yatra`,
         summary: `A curated ${days}-day pilgrimage through ${cities.join(' and ')} with temple darshan, prasadam breaks, and evening aarti.`,
@@ -308,7 +298,6 @@ function generateFallbackItinerary(placesByCity, cities, days, weather, budgetLe
             const dayPlaces = places.slice(d * placesPerDay, (d + 1) * placesPerDay).slice(0, 5);
             const slots = [];
 
-            
             const schedule = [
                 { time: '06:00–07:30', period: 'morning' },
                 { time: '08:00–09:30', period: 'morning' },
@@ -349,7 +338,9 @@ function generateFallbackItinerary(placesByCity, cities, days, weather, budgetLe
                         place_id: p.id,
                         duration_mins: p.estimated_visit_duration || 60,
                         description: p.description || `Visit ${p.name} in ${city}.`,
-                        tip: `Crowd level: ${p.crowd_level || 'moderate'}`
+                        tip: `Crowd level: ${p.crowd_level || 'moderate'}`,
+                        entry_fee: parseFloat(p.entry_fee) || 0,
+                        travel_cost_from_previous: placeIdx === 0 ? 0 : 50
                     });
                     placeIdx++;
                 }
@@ -358,12 +349,14 @@ function generateFallbackItinerary(placesByCity, cities, days, weather, budgetLe
             itinerary.days.push({
                 day: dayNum,
                 city,
-                theme: `Exploring ${city}`,
-                overview: `Visit ${dayPlaces.length} sacred places in ${city} with a prasadam lunch break`,
+                theme: city.toLowerCase() === 'agra' ? `Agra's Monuments & Heritage` : `Exploring ${city}`,
+                overview: city.toLowerCase() === 'agra'
+                    ? `Visit ${dayPlaces.length} iconic landmarks and heritage sites in Agra`
+                    : `Visit ${dayPlaces.length} sacred places in ${city} with a prasadam lunch break`,
                 slots
             });
 
-            itinerary.total_estimated_hours += dayPlaces.reduce((sum, p) => sum + (p.estimated_visit_duration || 60), 0) / 60 + 1; 
+            itinerary.total_estimated_hours += dayPlaces.reduce((sum, p) => sum + (p.estimated_visit_duration || 60), 0) / 60 + 1;
             dayNum++;
         }
     }
@@ -373,12 +366,12 @@ function generateFallbackItinerary(placesByCity, cities, days, weather, budgetLe
     addPlaceMapLinks(itinerary);
     itinerary.live_weather = weather;
 
-    
     const allFallbackPlaces = Object.values(placesByCity).flat();
     itinerary.budget = estimateBudget({
         places: allFallbackPlaces,
         days,
-        budgetLevel
+        budgetLevel,
+        people: groupTypeToPeople(groupType)
     });
 
     return { success: true, itinerary, source: 'fallback', cities };

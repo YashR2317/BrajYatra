@@ -1,26 +1,21 @@
-
-
 const llm = require('../llm/connector');
 const db = require('../db/database');
 const { CHAT_PROMPT, getLanguageInstruction } = require('../prompts/system-prompts');
 const { sanitizeInput } = require('../utils/helpers');
 
-
 async function chat(message, sessionId, language = 'en') {
     const sanitized = sanitizeInput(message);
 
-    
     let history = [];
     if (sessionId) {
         try {
             history = db.getSessionHistory(sessionId, 10);
         } catch (e) {
-            
+
             history = [];
         }
     }
 
-    
     let enrichedPrompt = CHAT_PROMPT;
     const CITY_NAMES = ['mathura', 'vrindavan', 'agra', 'govardhan', 'barsana', 'gokul'];
     const mentionedCities = CITY_NAMES.filter(c => sanitized.toLowerCase().includes(c));
@@ -50,13 +45,12 @@ async function chat(message, sessionId, language = 'en') {
         };
     }
 
-    
     if (sessionId) {
         try {
             db.saveMessage(sessionId, 'user', sanitized);
             db.saveMessage(sessionId, 'assistant', result.text);
         } catch (e) {
-            
+
             console.warn('[Chat] Failed to save message:', e.message);
         }
     }
@@ -64,7 +58,8 @@ async function chat(message, sessionId, language = 'en') {
     return {
         success: true,
         text: result.text,
-        source: result.source
+        source: result.source,
+        groundingMetadata: result.groundingMetadata || null
     };
 }
 

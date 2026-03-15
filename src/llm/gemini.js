@@ -1,5 +1,3 @@
-
-
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
@@ -15,18 +13,17 @@ function init() {
     model = genAI.getGenerativeModel({ model: MODEL_NAME });
 }
 
-
 function toSystemInstruction(text) {
     return { role: 'user', parts: [{ text }] };
 }
-
 
 async function generateResponse(systemPrompt, userMessage, history = []) {
     init();
 
     const chatModel = genAI.getGenerativeModel({
         model: MODEL_NAME,
-        systemInstruction: toSystemInstruction(systemPrompt)
+        systemInstruction: toSystemInstruction(systemPrompt),
+        tools: [{ googleSearch: {} }]
     });
 
     const chat = chatModel.startChat({
@@ -43,18 +40,32 @@ async function generateResponse(systemPrompt, userMessage, history = []) {
         try {
             const result = await chat.sendMessage(userMessage);
             const text = result.response.text();
-            return { success: true, text, source: 'gemini' };
+
+            let groundingMetadata = null;
+            try {
+                const candidate = result.response.candidates?.[0];
+                const gm = candidate?.groundingMetadata;
+                if (gm && gm.groundingChunks && gm.groundingChunks.length > 0) {
+                    groundingMetadata = {
+                        searchQueries: gm.webSearchQueries || [],
+                        sources: gm.groundingChunks
+                            .filter(c => c.web)
+                            .map(c => ({ url: c.web.uri, title: c.web.title }))
+                    };
+                }
+            } catch (e) { }
+
+            return { success: true, text, source: 'gemini', groundingMetadata };
         } catch (error) {
             attempts++;
             if (attempts >= maxAttempts) {
                 return { success: false, error: error.message, source: 'gemini' };
             }
-            
+
             await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempts)));
         }
     }
 }
-
 
 async function generateJSON(systemPrompt, userMessage) {
     init();

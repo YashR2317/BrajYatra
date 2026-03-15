@@ -1,5 +1,3 @@
-
-
 const fetch = require('node-fetch');
 const llm = require('../llm/connector');
 const { WEATHER_PROMPT } = require('../prompts/system-prompts');
@@ -7,7 +5,6 @@ const { getCityCentroid } = require('../utils/geo');
 require('dotenv').config();
 
 const OWM_KEY = process.env.OPENWEATHER_API_KEY;
-
 
 async function getWeather(city) {
     const coords = getCityCentroid(city);
@@ -18,7 +15,6 @@ async function getWeather(city) {
         };
     }
 
-    
     let weatherData = null;
     try {
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lng}&appid=${OWM_KEY}&units=metric`;
@@ -38,7 +34,6 @@ async function getWeather(city) {
         };
     }
 
-    
     const weather = {
         city: city,
         temp: Math.round(weatherData.main.temp),
@@ -49,7 +44,6 @@ async function getWeather(city) {
         visibility: weatherData.visibility ? Math.round(weatherData.visibility / 1000) : null
     };
 
-    
     const result = await llm.generateResponse(
         WEATHER_PROMPT,
         `Current weather in ${city}, India: Temperature ${weather.temp}°C (feels like ${weather.feels_like}°C), ${weather.description}, Humidity ${weather.humidity}%, Wind ${weather.wind_speed} m/s, Visibility ${weather.visibility || 'N/A'} km. The user is planning to visit temples, ghats, and monuments in the Braj region.`
